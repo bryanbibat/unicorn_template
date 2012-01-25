@@ -48,7 +48,7 @@ before "deploy:start", :symlink_unicorn_socket
 before "deploy:finalize_update", :copy_production_database_configuration, :create_symlink_to_log 
 
 task :create_unicorn_socket do
-  run "mkdir #{shared_path}/sockets -p; touch #{shared_path}/sockets/unicorn.sock"
+  run "mkdir #{shared_path}/sockets -p"
 end
 
 task :copy_production_database_configuration do
@@ -56,7 +56,7 @@ task :copy_production_database_configuration do
 end
 
 task :symlink_unicorn_socket do
-  run "mkdir #{current_path}/tmp/sockets -p; ln -s #{shared_path}/sockets/unicorn.sock #{current_path}/tmp/sockets/unicorn.sock"
+  run "ln -s #{shared_path}/sockets #{current_path}/tmp/sockets"
 end
 
 task :create_symlink_to_log do
