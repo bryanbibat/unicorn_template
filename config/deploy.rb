@@ -41,6 +41,7 @@ end
 
 after "deploy:setup", :create_unicorn_socket
 before "deploy:start", :symlink_unicorn_socket
+before "deploy:restart", :symlink_unicorn_socket
 before "deploy:finalize_update", :copy_production_database_configuration, :create_symlink_to_log 
 
 task :create_unicorn_socket do
