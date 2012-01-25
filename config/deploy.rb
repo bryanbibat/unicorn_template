@@ -26,7 +26,7 @@ set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
 
 namespace :deploy do
   task :start, :roles => :app, :except => { :no_release => true } do
-    run "cd #{current_path} && bundler exec unicorn -c #{unicorn_config} -E #{rails_env} -D"
+    run "cd #{current_path} && bundle exec unicorn -c #{unicorn_config} -E #{rails_env} -D"
   end
   task :stop, :roles => :app, :except => { :no_release => true } do
     run "kill `cat #{unicorn_pid}`"
@@ -45,8 +45,7 @@ end
 
 after "deploy:setup", :create_unicorn_socket
 before "deploy:start", :symlink_unicorn_socket
-after "deploy:update_code", :copy_production_database_configuration
-after "deploy:symlink", :create_symlink_to_log 
+before "deploy:finalize_update", :copy_production_database_configuration, :create_symlink_to_log 
 
 task :create_unicorn_socket do
   run "mkdir #{shared_path}/sockets -p; touch #{shared_path}/sockets/unicorn.sock"
